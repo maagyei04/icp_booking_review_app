@@ -1,19 +1,18 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { Container, Nav } from "react-bootstrap";
-import Products from "./components/marketplace/Products";
+import Products from "./components/bookMarketplace/Products";
 import "./App.css";
 import Wallet from "./components/Wallet";
-import coverImg from "./assets/img/sandwich.jpg";
+import coverImg from "./assets/img/sandwich.jpg"; 
 import { login, logout as destroy } from "./utils/auth";
 import Cover from "./components/utils/Cover";
 import { Notification } from "./components/utils/Notifications";
 import { isAuthenticated, getPrincipalText } from "./utils/auth";
 import { tokenBalance, tokenSymbol } from "./utils/icrc2_ledger";
 import { icpBalance } from "./utils/ledger";
-import { getAddressFromPrincipal } from "./utils/marketplace";
+import { getAddressFromPrincipal } from "./utils/bookMarketplace";  
 
-
-const App = function AppWrapper() {
+const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [principal, setPrincipal] = useState('');
   const [icrcBalance, setICRCBalance] = useState('');
@@ -21,48 +20,50 @@ const App = function AppWrapper() {
   const [symbol, setSymbol] = useState('');
   const [address, setAddress] = useState('');
 
-  const getICRCBalance = useCallback(async () => {
+  const fetchICRCBalance = useCallback(async () => {
     if (authenticated) {
-      setICRCBalance(await tokenBalance());
+      const balance = await tokenBalance();
+      setICRCBalance(balance);
     }
-  });
+  }, [authenticated]);
 
-  const getICPBalance = useCallback(async () => {
+  const fetchICPBalance = useCallback(async () => {
     if (authenticated) {
-      setICPBalance(await icpBalance());
+      const balance = await icpBalance();
+      setICPBalance(balance);
     }
-  });
-
-  useEffect(async () => {
-    setSymbol(await tokenSymbol());
-  }, [setSymbol]);
-
-  useEffect(async () => {
-    setAuthenticated(await isAuthenticated());
-  }, [setAuthenticated]);
-
-  useEffect(async () => {
-    const principal = await getPrincipalText();
-    setPrincipal(principal);
-  }, [setPrincipal]);
-
-  useEffect(async () => {
-    const principal = await getPrincipalText();
-    const account = await getAddressFromPrincipal(principal);
-    setAddress(account.account);
-  }, [setAddress]);
+  }, [authenticated]);
 
   useEffect(() => {
-    getICRCBalance();
-  }, [getICRCBalance]);
+    const fetchSymbol = async () => {
+      const symbol = await tokenSymbol();
+      setSymbol(symbol);
+    };
+    fetchSymbol();
+  }, []);
 
   useEffect(() => {
-    getICPBalance();
-  }, [getICPBalance]);
+    const checkAuthentication = async () => {
+      const isAuthenticatedUser = await isAuthenticated();
+      setAuthenticated(isAuthenticatedUser);
+      if (isAuthenticatedUser) {
+        const principal = await getPrincipalText();
+        setPrincipal(principal);
+        const account = await getAddressFromPrincipal(principal);
+        setAddress(account.account);
+      }
+    };
+    checkAuthentication();
+  }, []);
+
+  useEffect(() => {
+    fetchICRCBalance();
+    fetchICPBalance();
+  }, [fetchICRCBalance, fetchICPBalance]);
 
   return (
     <>
-    <Notification />
+      <Notification />
       {authenticated ? (
         <Container fluid="md">
           <Nav className="justify-content-end pt-3 pb-5">
@@ -83,7 +84,7 @@ const App = function AppWrapper() {
           </main>
         </Container>
       ) : (
-        <Cover name="Street Food" login={login} coverImg={coverImg} />
+        <Cover name="Book Review App" login={login} coverImg={coverImg} />
       )}
     </>
   );

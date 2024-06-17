@@ -8,7 +8,7 @@ import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 import {
   getProducts as getProductList,
   createProduct, buyProduct
-} from "../../utils/marketplace";
+} from "../../utils/bookMarketplace";
 import Wallet from "../Wallet";
 
 const Products = (tokenSymbol) => {

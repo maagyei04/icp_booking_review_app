@@ -1,89 +1,91 @@
-## Things to be explained in the course:
-1. What is Ledger? More details here: https://internetcomputer.org/docs/current/developer-docs/integrations/ledger/
-2. What is Internet Identity? More details here: https://internetcomputer.org/internet-identity
-3. What is Principal, Identity, Address? https://internetcomputer.org/internet-identity | https://yumimarketplace.medium.com/whats-the-difference-between-principal-id-and-account-id-3c908afdc1f9
-4. Canister-to-canister communication and how multi-canister development is done? https://medium.com/icp-league/explore-backend-multi-canister-development-on-ic-680064b06320
+# Book Review Application
 
-## Getting started
+## Description
 
-To get started developing in the browser, click this button:
+The Book Review Application allows users to browse and review books, manage their account details, and perform transactions related to book purchases and reviews.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/dacadeorg/icp-azle-201)
+## Functions Overview
 
-If you rather want to use GitHub Codespaces, click this button instead:
+### `isRegistered` Function
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dacadeorg/icp-azle-201?quickstart=1)
+Verifies whether a Principal has an account. Used for conditional rendering and input validation.
 
-**NOTE**: After deploying your canisters in GitHub Codespaces, run `./canister_urls.py` and click the links that are shown there.
+### `getAccount` Function
 
-If you prefer running VS Code locally and not in the browser, click "Codespaces: ..." or "Gitpod" in the bottom left corner and select "Open in VS Code" in the menu that appears. 
-If prompted, proceed by installing the recommended plugins for VS Code.
+Fetches the account data of the caller.
 
-To develop fully locally, first install [Docker](https://www.docker.com/get-started/) and [VS Code](https://code.visualstudio.com/) and start them on your machine.
-Next, click the following button to open the dev container locally:
+### `getCallerRequests` Function
 
-[![Open locally in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/dacadeorg/icp-azle-201)
+Fetches all requests of the caller.
 
-## How to deploy canisters implemented in the course
+### `getCanisterId` Function
 
-### Ledger canister
-`./deploy-local-ledger.sh` - deploys a local Ledger canister. IC works differently when run locally so there is no default network token available and you have to deploy it yourself. Remember that it's not a token like ERC-20 in Ethereum, it's a native token for ICP, just deployed separately.
-This canister is described in the `dfx.json`:
-```
-	"ledger_canister": {
-  	"type": "custom",
-  	"candid": "https://raw.githubusercontent.com/dfinity/ic/928caf66c35627efe407006230beee60ad38f090/rs/rosetta-api/icp_ledger/ledger.did",
-  	"wasm": "https://download.dfinity.systems/ic/928caf66c35627efe407006230beee60ad38f090/canisters/ledger-canister.wasm.gz",
-  	"remote": {
-    	"id": {
-      	"ic": "ryjl3-tyaaa-aaaaa-aaaba-cai"
-    	}
-  	}
-	}
-```
-`remote.id.ic` - that is the principal of the Ledger canister and it will be available by this principal when you work with the ledger.
+Fetches the ID of the backend/bank canister.
 
-Also, in the scope of this script, a minter identity is created which can be used for minting tokens
-for the testing purposes.
-Additionally, the default identity is pre-populated with 1000_000_000_000 e8s which is equal to 10_000 * 10**8 ICP.
-The decimals value for ICP is 10**8.
+### `createAccount` Function
 
-List identities:
-`dfx identity list`
+Allows the caller to create an account if none exists.
 
-Switch to the minter identity:
-`dfx identity use minter`
+### `createTransferRequest` Function
 
-Transfer ICP:
-`dfx ledger transfer <ADDRESS> --memo 0 --icp 100 --fee 0`
-where:
- - `--memo` is some correlation id that can be set to identify some particular transactions (we use that in the marketplace canister).
- - `--icp` is the transfer amount
- - `--fee` is the transaction fee. In this case it's 0 because we make this transfer as the minter idenity thus this transaction is of type MINT, not TRANSFER.
- - `<ADDRESS>` is the address of the recipient. To get the address from the principal, you can use the helper function from the marketplace canister - `getAddressFromPrincipal(principal: Principal)`, it can be called via the Candid UI.
+Allows the caller to create a transfer request to another user.
 
-### ICRC2 ledger canister
+### `handleTransferRequest` Function
 
-`deploy-local-icrc-ledger.sh` - deploys an ICRC2 canister.
+Allows the receiver to handle a transfer request (approve/reject).
 
-Transfer ICRC token:
-`dfx canister call icrc1_ledger_canister icrc1_transfer '(record { to = record { owner = principal "<PRINCIPAL>";};  amount = <AMOUNT>;})'`
-where:
-- `<PRINCIPAL>` is the principal string of the receiver
-- `<AMOUNT>` is the amount of token to be transferred
+### `transferFrom` Function
 
-### Internet identity canister
+Allows the caller to transfer tokens to a Principal.
 
-`deploy-local-identity.sh` - deploys an identity canister and outputs the canister id to `.env` as the `IDENTITY_CANISTER_ID` variable. Once it's deployed, the `js-agent` library will be talking to it to register identities. There is UI that acts as a wallet where you can select existing identities
-or create a new one.
+### `handleGetFee` Function
 
-### Marketplace canister
+Fetches the current fee of the ledger canister.
 
-Switch to the default identity:
-`dfx identity use default`
+### `handleGetAllowance` Function
 
-`deploy-local-backend-canister.sh` - deploys the marketplace canister where the business logic is implemented and outputs the canister id to `.env` as the `BACKEND_CANISTER_ID` variable.
-Basically, it implements functions like add, view, update, delete, and buy products + a set of helper functions.
+Fetches the current allowance of the backend/bank canister.
 
-### Marketplace frontend canister
-`dfx deploy dfinity_js_frontend` - deployes the frontend app for the `dfinity_js_backend` canister on IC.
+### `handleTransferFrom` Function
+
+Carries out the `transferFrom` operation used for handling transfers.
+
+## Deployment Instructions
+
+To deploy the Book Review Application canisters, follow these steps:
+
+1. **Start DFX Environment:**
+dfx start --background --clean
+
+
+2. **Deploy Ledger Canister:**
+./deploy-local-ledger.sh
+
+
+3. **Deploy Internet Identity:**
+dfx deploy internet_identity
+
+
+4. **Generate Types Declarations:**
+dfx generate icp_booking_review_backend
+
+
+5. **Deploy Backend Canister:**
+dfx deploy icp_booking_review_backend
+
+
+6. **Deploy Frontend Canister:**
+dfx deploy icp_booking_review_frontend
+
+
+7. **Transfer Tokens to Principal:**
+dfx identity use default
+dfx ledger transfer <ADDRESS> --memo 0 --icp 100
+
+Replace `<ADDRESS>` with the address of the recipient. Use `getAddressFromPrincipal(principal: Principal)` function to obtain the address.
+
+## Additional Notes
+
+- Adjust paths and environment variables (`BACKEND_CANISTER_ID`, etc.) in your application as per your setup.
+- Ensure all dependencies and configurations are correctly set up before deployment.
+- For more detailed documentation, refer to individual function implementations and canister descriptions.

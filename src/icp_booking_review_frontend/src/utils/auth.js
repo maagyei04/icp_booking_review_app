@@ -1,6 +1,5 @@
 import { AuthClient } from "@dfinity/auth-client";
 
-// that is the url of the webapp for the internet identity. 
 const IDENTITY_PROVIDER = `http://${process.env.IDENTITY_CANISTER_ID}.${window.location.hostname}:4943`;
 const MAX_TTL = 7 * 24 * 60 * 60 * 1000 * 1000 * 1000;
 

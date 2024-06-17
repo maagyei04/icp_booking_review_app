@@ -9,7 +9,7 @@ export async function createCanisterActor(canisterId, idl) {
         host: HOST,
         identity: authClient.getIdentity()
     });
-    await agent.fetchRootKey(); // this line is needed for the local env only
+    await agent.fetchRootKey(); //
     return Actor.createActor(idl, {
         agent,
         canisterId,

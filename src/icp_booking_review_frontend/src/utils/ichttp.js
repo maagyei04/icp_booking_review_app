@@ -19,6 +19,14 @@ class IcHttp {
         return await this.#doRequest(req.path, "POST", req.params, req.data);
     }
 
+    async PUT(req) {
+        return await this.#doRequest(req.path, "PUT", req.params, req.data);
+    }
+
+    async DELETE(req) {
+        return await this.#doRequest(req.path, "DELETE", req.params, req.data);
+    }
+
     async #doRequest(path, method, params, data) {
         try {
             const queryParams = new URLSearchParams(params ? params : {});
@@ -53,6 +61,7 @@ class IcHttp {
             if (err.name === 'AgentHTTPResponseError') {
                 logout();
             }
+            throw err;
         }
     }
 
@@ -62,7 +71,7 @@ class IcHttp {
             if (response.status_code !== 200) {
                 throw new Error(body);
             }
-            const contentType = response.headers.filter(header => "content-type" === header[0].toLowerCase()).map(header => header[1]);
+            const contentType = response.headers.filter(header => header[0].toLowerCase() === 'content-type').map(header => header[1]);
             if (contentType && contentType.length === 1 && contentType[0].toLowerCase() === 'application/json; charset=utf-8') {
                 return JSON.parse(body);
             }
@@ -72,4 +81,5 @@ class IcHttp {
         }
     }
 }
+
 export default IcHttp;

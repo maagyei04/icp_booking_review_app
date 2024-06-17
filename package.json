@@ -1,7 +1,7 @@
 {
-  "name": "dfinity_js_frontend",
+  "name": "icp_booking_review_frontend",
   "version": "0.2.0",
-  "description": "Internet Computer starter application",
+  "description": "Internet Computer booking review application",
   "keywords": [
     "Internet Computer",
     "Motoko",

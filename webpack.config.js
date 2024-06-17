@@ -7,7 +7,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-const frontendDirectory = "dfinity_js_frontend";
+const frontendDirectory = "icp_booking_review_frontend";
 
 const frontend_entry = path.join("src", frontendDirectory, "src", "index.html");
 
