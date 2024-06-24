@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { Container, Nav } from "react-bootstrap";
-import Products from "./components/bookMarketplace/Products";
+import Products from "./components/marketplace/Products";
 import "./App.css";
 import Wallet from "./components/Wallet";
 import coverImg from "./assets/img/sandwich.jpg"; 
@@ -22,7 +22,7 @@ const App = () => {
 
   const fetchICRCBalance = useCallback(async () => {
     if (authenticated) {
-      const balance = await tokenBalance();
+      const balance = await tokenBalance(); 
       setICRCBalance(balance);
     }
   }, [authenticated]);

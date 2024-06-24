@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { Card, Button, Col, Badge, Stack } from "react-bootstrap";
 import { Principal } from "@dfinity/principal";
 
-const Product = ({ tokemMetadata, product, buy }) => {
+const Product = ({ tokemMetadata, product }) => {
   const { id, price, title, description, location, attachmentURL, seller, soldAmount } = product;
 
-  const triggerBuy = () => {
-    buy(id, price);
-  };
+  // const triggerBuy = () => {
+  //   buy(id, price);
+  // };
 
   return (
     <Col key={id}>
@@ -33,13 +33,13 @@ const Product = ({ tokemMetadata, product, buy }) => {
           <Card.Text className="text-secondary">
             <span>{Principal.from(seller).toText()}</span>
           </Card.Text>
-          <Button
+          {/* <Button
             variant="outline-dark"
             onClick={triggerBuy}
             className="w-100 py-3"
           >
             Buy for {price} {tokemMetadata.tokenSymbol}
-          </Button>
+          </Button> */}
         </Card.Body>
       </Card>
     </Col>

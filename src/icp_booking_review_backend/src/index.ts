@@ -4,6 +4,9 @@ import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken'; // For token validation
 import sanitize from 'sanitize-html'; // For sanitizing user input
+import {
+ hexAddressFromPrincipal
+} from "azle/canisters/ledger";
 
 const JWT_SECRET = 'your-secure-jwt-secret'; // Replace with a secure secret key
 
@@ -100,6 +103,15 @@ export default Server(() => {
         const { offset = 0, limit = 10 } = req.query;
         const books = booksStorage.values().slice(offset, offset + limit);
         res.json(books);
+    });
+
+    /*
+        a helper function to get address from the principal
+        the address is later used in the transfer method
+    */
+    app.get("/principal-to-address/:principalHex", (req, res) => {
+            const principal = Principal.fromText(req.params.principalHex);
+            res.json({account: hexAddressFromPrincipal(principal, 0)});
     });
 
     // Get a book by id

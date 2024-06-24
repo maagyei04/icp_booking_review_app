@@ -6,8 +6,8 @@ import Loader from "../utils/Loader";
 import { Row } from "react-bootstrap";
 import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 import {
-  getProducts as getProductList,
-  createProduct, buyProduct
+  getBooks as getProductList,
+  createBook
 } from "../../utils/bookMarketplace";
 import Wallet from "../Wallet";
 
@@ -32,7 +32,7 @@ const Products = (tokenSymbol) => {
       setLoading(true);
       const priceStr = data.price;
       data.price = parseInt(priceStr, 10);
-      createProduct(data).then((resp) => {
+      createBook(data).then((resp) => {
         getProducts();
       });
       toast(<NotificationSuccess text="Product added successfully." />);
@@ -44,21 +44,21 @@ const Products = (tokenSymbol) => {
     }
   };
 
-  const buy = async (id, price) => {
-    try {
-      setLoading(true);
-      await buyProduct({
-        id, price
-      }).then((resp) => {
-        getProducts();
-        toast(<NotificationSuccess text="Product bought successfully" />);
-      });
-    } catch (error) {
-      toast(<NotificationError text="Failed to purchase product." />);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const buy = async (id, price) => {
+  //   try {
+  //     setLoading(true);
+  //     await buyProduct({
+  //       id, price
+  //     }).then((resp) => {
+  //       getProducts();
+  //       toast(<NotificationSuccess text="Product bought successfully" />);
+  //     });
+  //   } catch (error) {
+  //     toast(<NotificationError text="Failed to purchase product." />);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     getProducts();
@@ -79,7 +79,7 @@ const Products = (tokenSymbol) => {
                 product={{
                   ..._product,
                 }}
-                buy={buy}
+                // buy={buy}
               />
             ))}
           </Row>

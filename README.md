@@ -62,19 +62,23 @@ dfx start --background --clean
 ./deploy-local-ledger.sh
 
 
-3. **Deploy Internet Identity:**
+3. **Deploy ICRC Ledger Canister:**
+./deploy-local-icrc-ledger.sh
+
+
+4. **Deploy Internet Identity:**
 dfx deploy internet_identity
 
 
-4. **Generate Types Declarations:**
+5. **Generate Types Declarations:**
 dfx generate icp_booking_review_backend
 
 
-5. **Deploy Backend Canister:**
+6. **Deploy Backend Canister:**
 dfx deploy icp_booking_review_backend
 
 
-6. **Deploy Frontend Canister:**
+7. **Deploy Frontend Canister:**
 dfx deploy icp_booking_review_frontend
 
 

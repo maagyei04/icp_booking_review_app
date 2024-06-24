@@ -1,6 +1,6 @@
 import { createCanisterActor } from "./canisterFactory";
 import { getPrincipalText, isAuthenticated } from "./auth";
-import { idlFactory as bookReviewIDL } from "../../../declarations/book_review_canister/book_review_canister.did.js";
+import { idlFactory as bookReviewIDL } from "../../../declarations/icp_booking_review_backend/icp_booking_review_backend.did.js";
 import { Principal } from "@dfinity/principal";
 
 const BOOK_REVIEW_CANISTER_ID = "abcdef-aaaaa-aaaaa-aaaaa-cai";
